@@ -20,16 +20,16 @@ namespace ProceduralModeling {
         protected abstract Vector3 GetPoint(float t);
 
         protected virtual Vector3 GetTangent(float t) {
-            var delta = 0.001f;
-            var t1 = t - delta;
-            var t2 = t + delta;
+            float delta = 0.001f;
+            float t1 = t - delta;
+            float t2 = t + delta;
 
             // Capping in case of danger
             if (t1 < 0f) t1 = 0f;
             if (t2 > 1f) t2 = 1f;
 
-            var pt1 = GetPoint(t1);
-            var pt2 = GetPoint(t2);
+            Vector3 pt1 = GetPoint(t1);
+            Vector3 pt2 = GetPoint(t2);
             return (pt2 - pt1).normalized;
         }
 
@@ -149,7 +149,7 @@ namespace ProceduralModeling {
             Vector3[] binormals = new Vector3[segments + 1];
 
             for (int i = 0; i <= segments; i++) {
-                var u = (1f * i) / segments;
+                float u = (1f * i) / segments;
                 tangents[i] = GetTangentAt(u).normalized;
             }
 
@@ -163,7 +163,7 @@ namespace ProceduralModeling {
                 normals[i] = normals[i - 1];
                 binormals[i] = binormals[i - 1];
 
-				var axis = Vector3.Cross(tangents[i - 1], tangents[i]);
+				Vector3 axis = Vector3.Cross(tangents[i - 1], tangents[i]);
                 if (axis.magnitude > float.Epsilon) {
                     axis.Normalize();
 
