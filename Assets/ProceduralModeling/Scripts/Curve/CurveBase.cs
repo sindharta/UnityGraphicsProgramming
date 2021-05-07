@@ -118,13 +118,13 @@ namespace ProceduralModeling {
         }
 
         public List<FrenetFrame> ComputeFrenetFrames (int segments, bool closed = false) {
-            var tangent = GetTangentAt(0f).normalized;
-            var tx = Mathf.Abs(tangent.x);
-            var ty = Mathf.Abs(tangent.y);
-            var tz = Mathf.Abs(tangent.z);
+            Vector3 tangent = GetTangentAt(0f).normalized;
+            float tx = Mathf.Abs(tangent.x);
+            float ty = Mathf.Abs(tangent.y);
+            float tz = Mathf.Abs(tangent.z);
 
-            var normal = new Vector3();
-            var min = float.MaxValue;
+            Vector3 normal = new Vector3();
+            float min = float.MaxValue;
             if (tx <= min) {
                 min = tx;
                 normal.Set(1, 0, 0);
@@ -137,16 +137,16 @@ namespace ProceduralModeling {
                 normal.Set(0, 0, 1);
             }
 
-            var vec = Vector3.Cross(tangent, normal).normalized;
+            Vector3 vec = Vector3.Cross(tangent, normal).normalized;
             normal = Vector3.Cross(tangent, vec);
-            var binormal = Vector3.Cross(tangent, normal);
+            Vector3 binormal = Vector3.Cross(tangent, normal);
 			return ComputeFrenetFrames(segments, normal, binormal, closed);
         }
 
 		public List<FrenetFrame> ComputeFrenetFrames(int segments, Vector3 normal, Vector3 binormal, bool closed = false) {
-            var tangents = new Vector3[segments + 1];
-            var normals = new Vector3[segments + 1];
-            var binormals = new Vector3[segments + 1];
+            Vector3[] tangents  = new Vector3[segments + 1];
+            Vector3[] normals   = new Vector3[segments + 1];
+            Vector3[] binormals = new Vector3[segments + 1];
 
             for (int i = 0; i <= segments; i++) {
                 var u = (1f * i) / segments;
@@ -191,10 +191,10 @@ namespace ProceduralModeling {
                 }
             }
 
-            var frames = new List<FrenetFrame>();
+            List<FrenetFrame> frames = new List<FrenetFrame>();
             int n = tangents.Length;
             for(int i = 0; i < n; i++) {
-                var frame = new FrenetFrame(tangents[i], normals[i], binormals[i]);
+                FrenetFrame frame = new FrenetFrame(tangents[i], normals[i], binormals[i]);
                 frames.Add(frame);
             }
             return frames;
