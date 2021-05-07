@@ -46,7 +46,7 @@ namespace ProceduralModeling {
 			float maxLength = TraverseMaxLength(root);
 
 			// 再帰的に全ての枝を辿り、一つ一つの枝に対応するMeshを生成する
-			Traverse(root, (branch) => {
+			Traverse(root, (TreeBranch branch) => {
 				int offset = vertices.Count;
 
 				float vOffset = branch.Offset / maxLength;
@@ -282,25 +282,25 @@ namespace ProceduralModeling {
 		}
 
 		List<TreeSegment> BuildSegments (TreeData data, float fromRadius, float toRadius, Vector3 normal, Vector3 binormal) {
-			var segments = new List<TreeSegment>();
+			List<TreeSegment> segments = new List<TreeSegment>();
 
-			var curve = new CatmullRomCurve();
+			CatmullRomCurve curve = new CatmullRomCurve();
 			curve.Points.Clear();
 
-			var length = (to - from).magnitude;
-			var bend = length * (normal * data.GetRandomBendDegree() + binormal * data.GetRandomBendDegree());
+			float length = (to - from).magnitude;
+			Vector3 bend = length * (normal * data.GetRandomBendDegree() + binormal * data.GetRandomBendDegree());
 			curve.Points.Add(from);
 			curve.Points.Add(Vector3.Lerp(from, to, 0.25f) + bend);
 			curve.Points.Add(Vector3.Lerp(from, to, 0.75f) + bend);
 			curve.Points.Add(to);
 
-			var frames = curve.ComputeFrenetFrames(data.heightSegments, normal, binormal, false);
+			List<FrenetFrame> frames = curve.ComputeFrenetFrames(data.heightSegments, normal, binormal, false);
 			for(int i = 0, n = frames.Count; i < n; i++) {
-				var u = 1f * i / (n - 1);
-                var radius = Mathf.Lerp(fromRadius, toRadius, u);
+				float u = 1f * i / (n - 1);
+                float radius = Mathf.Lerp(fromRadius, toRadius, u);
 
-				var position = curve.GetPointAt(u);
-				var segment = new TreeSegment(frames[i], position, radius);
+				Vector3 position = curve.GetPointAt(u);
+				TreeSegment segment = new TreeSegment(frames[i], position, radius);
 				segments.Add(segment);
 			}
 			return segments;
