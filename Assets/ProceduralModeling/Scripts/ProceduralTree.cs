@@ -27,18 +27,18 @@ namespace ProceduralModeling {
 		public static Mesh Build(TreeData data, int generations, float length, float radius) {
 			data.Setup();
 
-			var root = new TreeBranch(
+			TreeBranch root = new TreeBranch(
 				generations, 
 				length, 
 				radius, 
 				data
 			);
 
-			var vertices = new List<Vector3>();
-			var normals = new List<Vector3>();
-			var tangents = new List<Vector4>();
-			var uvs = new List<Vector2>();
-			var triangles = new List<int>();
+			List<Vector3> vertices  = new List<Vector3>();
+			List<Vector3> normals   = new List<Vector3>();
+			List<Vector4> tangents  = new List<Vector4>();
+			List<Vector2> uvs       = new List<Vector2>();
+			List<int>     triangles = new List<int>();
 
 			// 木の全長を取得
 			// 枝の長さを全長で割ることで、uv座標の高さ(uv.y)が
@@ -47,30 +47,30 @@ namespace ProceduralModeling {
 
 			// 再帰的に全ての枝を辿り、一つ一つの枝に対応するMeshを生成する
 			Traverse(root, (branch) => {
-				var offset = vertices.Count;
+				int offset = vertices.Count;
 
-				var vOffset = branch.Offset / maxLength;
-				var vLength = branch.Length / maxLength;
+				float vOffset = branch.Offset / maxLength;
+				float vLength = branch.Length / maxLength;
 
 				// 一本の枝から頂点データを生成する
 				for(int i = 0, n = branch.Segments.Count; i < n; i++) {
-					var t = 1f * i / (n - 1);
-					var v = vOffset + vLength * t;
+					float t = 1f * i / (n - 1);
+					float v = vOffset + vLength * t;
 
-					var segment = branch.Segments[i];
-					var N = segment.Frame.Normal;
-					var B = segment.Frame.Binormal;
+					TreeSegment segment = branch.Segments[i];
+					Vector3 N = segment.Frame.Normal;
+					Vector3 B = segment.Frame.Binormal;
 					for(int j = 0; j <= data.radialSegments; j++) {
 						// 0.0 ~ 2π
-						var u = 1f * j / data.radialSegments;
+						float u = 1f * j / data.radialSegments;
 						float rad = u * PI2;
 
 						float cos = Mathf.Cos(rad), sin = Mathf.Sin(rad);
-						var normal = (cos * N + sin * B).normalized;
+						Vector3 normal = (cos * N + sin * B).normalized;
 						vertices.Add(segment.Position + segment.Radius * normal);
 						normals.Add(normal);
 
-						var tangent = segment.Frame.Tangent;
+						Vector3 tangent = segment.Frame.Tangent;
 						tangents.Add(new Vector4(tangent.x, tangent.y, tangent.z, 0f));
 
 						uvs.Add(new Vector2(u, v));
@@ -96,7 +96,7 @@ namespace ProceduralModeling {
 				}
 			});
 
-			var mesh = new Mesh();
+			Mesh mesh = new Mesh();
 			mesh.vertices = vertices.ToArray();
 			mesh.normals = normals.ToArray();
 			mesh.tangents = tangents.ToArray();
