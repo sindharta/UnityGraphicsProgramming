@@ -19,14 +19,14 @@ namespace ProceduralModeling {
 		const float PI2 = Mathf.PI * 2f;
 
 		protected override Mesh Build() {
-			var vertices = new List<Vector3>();
-			var normals = new List<Vector3>();
-			var tangents = new List<Vector4>();
-			var uvs = new List<Vector2>();
-			var triangles = new List<int>();
+			List<Vector3> vertices  = new List<Vector3>();
+			List<Vector3> normals   = new List<Vector3>();
+			List<Vector4> tangents  = new List<Vector4>();
+			List<Vector2> uvs       = new List<Vector2>();
+			List<int>     triangles = new List<int>();
 
 			// 曲線からFrenet frameを取得
-			var frames = curve.ComputeFrenetFrames(tubularSegments, closed);
+			List<FrenetFrame> frames = curve.ComputeFrenetFrames(tubularSegments, closed);
 
 			// Tubularの頂点データを生成
 			for(int i = 0; i < tubularSegments; i++) {
@@ -75,13 +75,13 @@ namespace ProceduralModeling {
 			int index
 		) {
 			// 0.0 ~ 1.0
-			var u = 1f * index / tubularSegments;
+			float u = 1f * index / tubularSegments;
 
-			var p = curve.GetPointAt(u);
-			var fr = frames[index];
+			Vector3 p = curve.GetPointAt(u);
+			FrenetFrame fr = frames[index];
 
-			var N = fr.Normal;
-			var B = fr.Binormal;
+			Vector3 N = fr.Normal;
+			Vector3 B = fr.Binormal;
 
 			for(int j = 0; j <= radialSegments; j++) {
 				// 0.0 ~ 2π
@@ -89,11 +89,11 @@ namespace ProceduralModeling {
 
 				// 円周に沿って均等に頂点を配置する
 				float cos = Mathf.Cos(rad), sin = Mathf.Sin(rad);
-				var v = (cos * N + sin * B).normalized;
+				Vector3 v = (cos * N + sin * B).normalized;
 				vertices.Add(p + radius * v);
 				normals.Add(v);
 
-				var tangent = fr.Tangent;
+				Vector3 tangent = fr.Tangent;
 				tangents.Add(new Vector4(tangent.x, tangent.y, tangent.z, 0f));
 			}
 		}
