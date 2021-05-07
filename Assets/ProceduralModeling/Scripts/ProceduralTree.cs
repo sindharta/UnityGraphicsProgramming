@@ -222,13 +222,13 @@ namespace ProceduralModeling {
 			this.from = from;
 
 			// 枝先ほど分岐する角度が大きくなる
-            var scale = Mathf.Lerp(1f, data.growthAngleScale, 1f - 1f * generation / generations);
+            float scale = Mathf.Lerp(1f, data.growthAngleScale, 1f - 1f * generation / generations);
 
 			// normal方向の回転
-			var qn = Quaternion.AngleAxis(scale * data.GetRandomGrowthAngle(), normal);
+			Quaternion qn = Quaternion.AngleAxis(scale * data.GetRandomGrowthAngle(), normal);
 
 			// binormal方向の回転
-			var qb = Quaternion.AngleAxis(scale * data.GetRandomGrowthAngle(), binormal);
+			Quaternion qb = Quaternion.AngleAxis(scale * data.GetRandomGrowthAngle(), binormal);
 
 			// 枝先が向いているtangent方向にqn * qbの回転をかけつつ、枝先の位置を決める
 			this.to = from + (qn * qb) * tangent * length;
@@ -255,15 +255,15 @@ namespace ProceduralModeling {
                     }
 
 					// 分岐元の節を取得
-                    var index = Mathf.FloorToInt(ratio * (segments.Count - 1));
-					var segment = segments[index];
+                    int index = Mathf.FloorToInt(ratio * (segments.Count - 1));
+					TreeSegment segment = segments[index];
 
 					// 分岐元の節が持つベクトルをTreeBranchに渡すことで滑らかな分岐を得る
 					Vector3 nt = segment.Frame.Tangent;
 					Vector3 nn = segment.Frame.Normal;
                 	Vector3 nb = segment.Frame.Binormal;
 
-					var child = new TreeBranch(
+					TreeBranch child = new TreeBranch(
 						this.generation - 1, 
                         generations,
 						segment.Position, 
