@@ -4,27 +4,27 @@ using UnityEngine;
 
 namespace ProceduralModeling {
 
-	public class CubicPoly3D {
-		Vector3 c0, c1, c2, c3;
+    public class CubicPoly3D {
+        Vector3 c0, c1, c2, c3;
 
-		public CubicPoly3D(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float tension = 0.5f) {
-			var t0 = tension * (v2 - v0);
-			var t1 = tension * (v3 - v1);
+        public CubicPoly3D(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float tension = 0.5f) {
+            var t0 = tension * (v2 - v0);
+            var t1 = tension * (v3 - v1);
 
-			c0 = v1;
+            c0 = v1;
             c1 = t0;
             c2 = -3f * v1 + 3f * v2 - 2f * t0 - t1;
             c3 = 2f * v1 - 2f * v2 + t0 + t1;
-		}
+        }
 
-		public Vector3 Calculate(float t) {
-			var t2 = t * t;
-			var t3 = t2 * t;
-			return c0 + c1 * t + c2 * t2 + c3 * t3;
-		}
-	}
+        public Vector3 Calculate(float t) {
+            var t2 = t * t;
+            var t3 = t2 * t;
+            return c0 + c1 * t + c2 * t2 + c3 * t3;
+        }
+    }
 
-	[System.Serializable]
+    [System.Serializable]
     public class CatmullRomCurve : CurveBase {
 
         protected override Vector3 GetPoint(float t) {
@@ -62,8 +62,8 @@ namespace ProceduralModeling {
                 p3 = tmp;
             }
 
-			var poly = new CubicPoly3D(p0, p1, p2, p3);
-			return poly.Calculate(weight);
+            var poly = new CubicPoly3D(p0, p1, p2, p3);
+            return poly.Calculate(weight);
         }
     }
 

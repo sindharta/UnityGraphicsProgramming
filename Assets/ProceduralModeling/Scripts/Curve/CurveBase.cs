@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace ProceduralModeling {
 
-	[System.Serializable]
+    [System.Serializable]
     public abstract class CurveBase {
 
-		public List<Vector3> Points { get { return points; } }
+        public List<Vector3> Points { get { return points; } }
 
-		[SerializeField] protected List<Vector3> points = new List<Vector3>() { Vector3.zero, Vector3.right, Vector3.up, Vector3.left };
+        [SerializeField] protected List<Vector3> points = new List<Vector3>() { Vector3.zero, Vector3.right, Vector3.up, Vector3.left };
         [SerializeField] protected bool closed = false;
 
         protected float[] cacheArcLengths;
@@ -140,10 +140,10 @@ namespace ProceduralModeling {
             Vector3 vec = Vector3.Cross(tangent, normal).normalized;
             normal = Vector3.Cross(tangent, vec);
             Vector3 binormal = Vector3.Cross(tangent, normal);
-			return ComputeFrenetFrames(segments, normal, binormal, closed);
+            return ComputeFrenetFrames(segments, normal, binormal, closed);
         }
 
-		public List<FrenetFrame> ComputeFrenetFrames(int segments, Vector3 normal, Vector3 binormal, bool closed = false) {
+        public List<FrenetFrame> ComputeFrenetFrames(int segments, Vector3 normal, Vector3 binormal, bool closed = false) {
             Vector3[] tangents  = new Vector3[segments + 1];
             Vector3[] normals   = new Vector3[segments + 1];
             Vector3[] binormals = new Vector3[segments + 1];
@@ -153,8 +153,8 @@ namespace ProceduralModeling {
                 tangents[i] = GetTangentAt(u).normalized;
             }
 
-			normals[0] = normal;
-			binormals[0] = binormal;
+            normals[0] = normal;
+            binormals[0] = binormal;
 
             float theta;
 
@@ -163,7 +163,7 @@ namespace ProceduralModeling {
                 normals[i] = normals[i - 1];
                 binormals[i] = binormals[i - 1];
 
-				Vector3 axis = Vector3.Cross(tangents[i - 1], tangents[i]);
+                Vector3 axis = Vector3.Cross(tangents[i - 1], tangents[i]);
                 if (axis.magnitude > float.Epsilon) {
                     axis.Normalize();
 
@@ -198,7 +198,7 @@ namespace ProceduralModeling {
                 frames.Add(frame);
             }
             return frames;
-		}
+        }
 
     }
 
