@@ -30,9 +30,13 @@ ExportedObj/
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
-# Builds
+# Terrain Upgrade
+Assets/_TerrainAutoUpgrade/*
+Assets/_TerrainAutoUpgrade.*
+
+# Builds, Logs, etc
 *.apk
 *.unitypackage
-
-# Logs 
 Logs/*.log
+UserSettings/*
+
